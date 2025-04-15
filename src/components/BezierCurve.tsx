@@ -32,7 +32,9 @@ function BezierCurve() {
   }, [])
 
   const material = useMemo(() => {
-    const material = new THREE.MeshNormalMaterial()
+    const material = new THREE.MeshPhysicalMaterial({
+      color: 0x2222cc,
+    })
 
     return material
   }, [])
