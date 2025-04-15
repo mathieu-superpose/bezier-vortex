@@ -1,9 +1,10 @@
 import { useMemo } from "react"
 import * as THREE from "three/webgpu"
-import { fract, texture, uniform, uv, vec4 } from "three/tsl"
+import { fract, step, texture, uniform, uv, vec4 } from "three/tsl"
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
 import { useFrame } from "@react-three/fiber"
 import { useTexture } from "@react-three/drei"
+import { mix } from "three/src/nodes/TSL.js"
 
 function bezier(a: number, b: number, c: number, d: number, t: number) {
   const oneMinusT = 1 - t
@@ -43,12 +44,16 @@ function BezierCurve() {
   const playhead = uniform(10.5)
 
   const setColorNode = () => {
+    const blueColor = vec4(0, 0, 1, 1)
+
     let row = fract(uv().x.add(playhead))
     let col = fract(uv().y.add(playhead))
-
     let newUV = vec4(row, col, 0, 1)
+    const vortex = texture(myMap, newUV).sub(0.5)
 
-    return texture(myMap, newUV)
+    const newColor = step(vortex, blueColor)
+
+    return newColor
   }
 
   const material = useMemo(() => {
