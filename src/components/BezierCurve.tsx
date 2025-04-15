@@ -44,16 +44,20 @@ function BezierCurve() {
   const playhead = uniform(10.5)
 
   const setColorNode = () => {
-    const blueColor = vec4(0, 0, 1, 1)
+    const blueColor = vec4(0, 0, 0.7, 1)
+    const darkColor = vec4(0.1, 0.1, 0.1, 1)
 
     let row = fract(uv().x.add(playhead))
     let col = fract(uv().y.add(playhead))
     let newUV = vec4(row, col, 0, 1)
+
     const vortex = texture(myMap, newUV).sub(0.5)
 
-    const newColor = step(vortex, blueColor)
+    const blackAndWhite = vortex.step(0.1)
 
-    return newColor
+    const color = mix(blueColor, darkColor, blackAndWhite)
+
+    return color
   }
 
   const material = useMemo(() => {
