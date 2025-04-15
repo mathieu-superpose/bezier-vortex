@@ -9,3 +9,5 @@ A R3F application of Yuri Artiukh [live tutorial](https://www.youtube.com/watch?
 - Bundler: Vite
 - JS library: React
 - Deployment: gh-pages
+- 3d renderer: R3F
+- R3F helpers: Drei
