@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber"
 import { useMemo } from "react"
 
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
-import { floor, Fn, fract, uniform, uv, vec4 } from "three/tsl"
+import { floor, Fn, fract, sin, uniform, uv, vec4 } from "three/tsl"
 
 import * as THREE from "three/webgpu"
 
@@ -37,7 +37,9 @@ function BezierCurve() {
 
   const setColorNode = () => {
     let row = floor(fract(uv().y.add(playhead)).mul(20))
-    return vec4(row.div(10), 0, 0, 1)
+    let randomValue = fract(sin(row.mul(123)).mul(456789.123))
+
+    return vec4(randomValue, 0, 0, 1)
   }
 
   const material = useMemo(() => {
@@ -52,7 +54,7 @@ function BezierCurve() {
   }, [])
 
   useFrame((state) => {
-    playhead.value = state.clock.getElapsedTime()
+    playhead.value = -1 * state.clock.getElapsedTime() * 0.05
     material.colorNode = setColorNode()
   })
 
