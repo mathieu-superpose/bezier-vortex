@@ -22,14 +22,14 @@ const paraFunction = function (u: number, v: number, target: THREE.Vector3) {
   const r = getRadius(v)
   const x = r * Math.sin(u * Math.PI * 2)
   const y = r * Math.cos(u * Math.PI * 2)
-  const z = -1 * (v - 0.5) * 20
+  const z = -1 * (v - 0.5) * 18
 
   target.set(x, y, z)
 }
 
 function BezierCurve() {
   const geometry = useMemo(() => {
-    return new ParametricGeometry(paraFunction, 8, 8)
+    return new ParametricGeometry(paraFunction, 32, 32)
   }, [])
 
   const material = useMemo(() => {
