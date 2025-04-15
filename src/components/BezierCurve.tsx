@@ -1,6 +1,5 @@
 import { useMemo } from "react"
 import * as THREE from "three"
-import { MeshStandardMaterial } from "three"
 
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
 
@@ -15,7 +14,7 @@ function bezier(a: number, b: number, c: number, d: number, t: number) {
 }
 
 function getRadius(t: number) {
-  return bezier(70, 1, 1, 1, t)
+  return bezier(75, 1, 1, 1, t)
 }
 
 const paraFunction = function (u: number, v: number, target: THREE.Vector3) {
@@ -33,9 +32,7 @@ function BezierCurve() {
   }, [])
 
   const material = useMemo(() => {
-    const material = new MeshStandardMaterial({
-      color: 0x1111aa,
-    })
+    const material = new THREE.MeshNormalMaterial()
 
     return material
   }, [])
