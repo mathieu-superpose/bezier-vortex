@@ -1,8 +1,8 @@
 function Environment() {
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight intensity={0.5} position={[10, 10, 5]} />
+      <ambientLight intensity={0.7} />
+      <directionalLight intensity={2} position={[25, 10, 10]} />
     </>
   )
 }
