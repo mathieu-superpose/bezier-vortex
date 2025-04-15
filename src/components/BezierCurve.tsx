@@ -1,6 +1,17 @@
 import { useMemo } from "react"
 import * as THREE from "three/webgpu"
-import { fract, step, texture, uniform, uv, vec4 } from "three/tsl"
+import {
+  abs,
+  floor,
+  Fn,
+  fract,
+  sin,
+  step,
+  texture,
+  uniform,
+  uv,
+  vec4,
+} from "three/tsl"
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
 import { useFrame } from "@react-three/fiber"
 import { useTexture } from "@react-three/drei"
@@ -43,22 +54,26 @@ function BezierCurve() {
   }, [])
   const playhead = uniform(10.5)
 
-  const setColorNode = () => {
-    const blueColor = vec4(0, 0, 0.7, 1)
-    const darkColor = vec4(0.1, 0.1, 0.1, 1)
+  const setColorNode = Fn(() => {
+    const blueColor = vec4(0, 0, 0.5, 1)
 
-    let row = fract(uv().x.add(playhead))
-    let col = fract(uv().y.add(playhead))
-    let newUV = vec4(row, col, 0, 1)
+    let row = abs(floor(fract(uv().y.add(playhead)).mul(10)))
+    let randomValue = fract(sin(row.mul(123)).mul(456789.123))
 
-    const vortex = texture(myMap, newUV).sub(0.5)
+    let speedFactor = row.mul(0.2)
 
-    const blackAndWhite = vortex.step(0.1)
+    let newuv = uv().toVar()
 
-    const color = mix(blueColor, darkColor, blackAndWhite)
+    newuv.y.addAssign(playhead)
+
+    newuv.x.mulAssign(2).addAssign(playhead.mul(speedFactor)).mul(randomValue)
+
+    const vortex = texture(myMap, newuv).sub(0.5)
+
+    const color = step(vortex, blueColor).sub(0.1)
 
     return color
-  }
+  })
 
   const material = useMemo(() => {
     const material = new THREE.MeshPhysicalNodeMaterial({
