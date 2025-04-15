@@ -15,7 +15,6 @@ import {
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
 import { useFrame } from "@react-three/fiber"
 import { useTexture } from "@react-three/drei"
-import { mix } from "three/src/nodes/TSL.js"
 
 function bezier(a: number, b: number, c: number, d: number, t: number) {
   const oneMinusT = 1 - t
@@ -28,7 +27,7 @@ function bezier(a: number, b: number, c: number, d: number, t: number) {
 }
 
 function getRadius(t: number) {
-  return bezier(100, 1, 1, 1, t)
+  return bezier(100, 1, 1, 2.5, t)
 }
 
 const paraFunction = function (u: number, v: number, target: THREE.Vector3) {
@@ -60,7 +59,7 @@ function BezierCurve() {
     let row = abs(floor(fract(uv().y.add(playhead)).mul(10)))
     let randomValue = fract(sin(row.mul(123)).mul(456789.123))
 
-    let speedFactor = row.mul(0.2)
+    let speedFactor = row.mul(0.25)
 
     let newuv = uv().toVar()
 
@@ -70,7 +69,7 @@ function BezierCurve() {
 
     const vortex = texture(myMap, newuv).sub(0.5)
 
-    const color = step(vortex, blueColor).sub(0.1)
+    const color = step(vortex, blueColor).sub(0.4)
 
     return color
   })

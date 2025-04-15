@@ -1,9 +1,9 @@
+import { useEffect, useRef } from "react"
 import * as THREE from "three"
 import { PerspectiveCamera } from "@react-three/drei"
 
 import Environment from "./components/Environment"
 import BezierCurve from "./components/BezierCurve"
-import { useEffect, useRef } from "react"
 
 function Scene() {
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null)
@@ -20,7 +20,6 @@ function Scene() {
   return (
     <>
       <PerspectiveCamera ref={cameraRef} makeDefault fov={75} />
-
       <Environment />
 
       <BezierCurve />
