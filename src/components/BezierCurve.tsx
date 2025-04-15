@@ -1,10 +1,9 @@
-import { useFrame } from "@react-three/fiber"
 import { useMemo } from "react"
-
-import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
-import { floor, Fn, fract, sin, uniform, uv, vec4 } from "three/tsl"
-
 import * as THREE from "three/webgpu"
+import { fract, texture, uniform, uv, vec4 } from "three/tsl"
+import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
+import { useFrame } from "@react-three/fiber"
+import { useTexture } from "@react-three/drei"
 
 function bezier(a: number, b: number, c: number, d: number, t: number) {
   const oneMinusT = 1 - t
@@ -30,16 +29,26 @@ const paraFunction = function (u: number, v: number, target: THREE.Vector3) {
 }
 
 function BezierCurve() {
+  const myMap = useTexture("vortex.png")
+  myMap.colorSpace = THREE.SRGBColorSpace
+  myMap.minFilter = THREE.LinearFilter
+  myMap.magFilter = THREE.LinearFilter
+  myMap.wrapS = THREE.RepeatWrapping
+  myMap.wrapT = THREE.RepeatWrapping
+  myMap.repeat.set(1, 1)
+
   const geometry = useMemo(() => {
-    return new ParametricGeometry(paraFunction, 32, 32)
+    return new ParametricGeometry(paraFunction, 128, 128)
   }, [])
   const playhead = uniform(10.5)
 
   const setColorNode = () => {
-    let row = floor(fract(uv().y.add(playhead)).mul(20))
-    let randomValue = fract(sin(row.mul(123)).mul(456789.123))
+    let row = fract(uv().x.add(playhead))
+    let col = fract(uv().y.add(playhead))
 
-    return vec4(randomValue, 0, 0, 1)
+    let newUV = vec4(row, col, 0, 1)
+
+    return texture(myMap, newUV)
   }
 
   const material = useMemo(() => {
@@ -48,13 +57,12 @@ function BezierCurve() {
       metalness: 0.5,
     })
 
-    material.colorNode = setColorNode()
-
     return material
   }, [])
 
   useFrame((state) => {
     playhead.value = -1 * state.clock.getElapsedTime() * 0.05
+
     material.colorNode = setColorNode()
   })
 
