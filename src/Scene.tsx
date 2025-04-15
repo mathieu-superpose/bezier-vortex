@@ -12,8 +12,9 @@ function Scene() {
     if (!cameraRef?.current) {
       return
     }
-    cameraRef.current.position.set(0, 48, 52)
-    cameraRef.current.lookAt(0, -18, 18)
+    const camRatio = 1.05
+    cameraRef.current.position.set(0, 48 * camRatio, 52 * camRatio)
+    cameraRef.current.lookAt(0, -14, 18)
   }, [])
 
   return (

@@ -1,7 +1,9 @@
 import { useMemo } from "react"
-import * as THREE from "three"
 
 import { ParametricGeometry } from "three/addons/geometries/ParametricGeometry.js"
+import { Fn, uv, vec4 } from "three/tsl"
+
+import * as THREE from "three/webgpu"
 
 function bezier(a: number, b: number, c: number, d: number, t: number) {
   const oneMinusT = 1 - t
@@ -14,14 +16,14 @@ function bezier(a: number, b: number, c: number, d: number, t: number) {
 }
 
 function getRadius(t: number) {
-  return bezier(75, 1, 1, 1, t)
+  return bezier(100, 1, 1, 1, t)
 }
 
 const paraFunction = function (u: number, v: number, target: THREE.Vector3) {
   const r = getRadius(v)
   const x = r * Math.sin(u * Math.PI * 2)
   const y = r * Math.cos(u * Math.PI * 2)
-  const z = -1 * (v - 0.5) * 18
+  const z = -1 * (v - 0.5) * 20
 
   target.set(x, y, z)
 }
@@ -32,11 +34,14 @@ function BezierCurve() {
   }, [])
 
   const material = useMemo(() => {
-    const material = new THREE.MeshPhysicalMaterial({
-      color: 0x2222cc,
+    const material = new THREE.MeshPhysicalNodeMaterial({
       roughness: 0.5,
       metalness: 0.5,
     })
+
+    material.colorNode = Fn(() => {
+      return vec4(uv().mul(10).fract(), 0.5, 1)
+    })()
 
     return material
   }, [])
