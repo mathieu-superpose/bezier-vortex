@@ -4,6 +4,10 @@ A R3F application of Yuri Artiukh [live tutorial](https://www.youtube.com/watch?
 
 ## [TRY IT](https://mathieu-superpose.github.io/bezier-vortex)
 
+## Ressources
+
+- graphic math curves (bezier curve): [desmos](https://www.desmos.com/calculator)
+
 ## Technology
 
 - Bundler: Vite
